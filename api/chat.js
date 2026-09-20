@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         "X-Title": "Infinity AI"
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o",
+        model: "openrouter/free",
         messages: [
           {
             role: "system",
