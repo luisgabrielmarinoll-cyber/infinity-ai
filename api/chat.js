@@ -21,7 +21,10 @@ export default async function handler(req, res) {
           "X-Title": "Infinity AI"
         },
         body: JSON.stringify({
-          model: "google/gemma-4-31b-it:free",
+          models: [
+            "google/gemma-4-31b-it:free",
+            "openrouter/free"
+          ],
           messages: messages
         })
       }
