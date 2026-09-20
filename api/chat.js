@@ -10,14 +10,16 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Messages are required" });
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "https://infinity-ai-zeta.vercel.app",
+        "X-Title": "Infinity AI"
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+        model: "openai/gpt-4o",
         messages: [
           {
             role: "system",
@@ -33,13 +35,14 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.error?.message || "OpenAI request failed"
+        error: data.error?.message || "OpenRouter request failed"
       });
     }
 
     return res.status(200).json({
       reply: data.choices[0].message.content
     });
+
   } catch (error) {
     return res.status(500).json({
       error: error.message || "Server error"
