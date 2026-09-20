@@ -33,49 +33,79 @@ body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b0d12;color:#f5f7f
 
 .composer{padding:18px 10% 25px}
 .box{
-  max-width:900px;
-  margin:auto;
-  background:#151922;
-  border:1px solid #303644;
-  border-radius:18px;
-  padding:12px;
-  display:flex;
-  align-items:flex-end;
-  gap:10px
+max-width:900px;
+margin:auto;
+background:#151922;
+border:1px solid #303644;
+border-radius:18px;
+padding:12px;
+display:flex;
+align-items:flex-end;
+gap:10px
 }
+
 .box textarea{
-  flex:1;
-  background:transparent;
-  border:0;
-  outline:0;
-  color:white;
-  resize:none;
-  font-size:16px;
-  min-height:42px;
-  padding:9px
+flex:1;
+background:transparent;
+border:0;
+outline:0;
+color:white;
+resize:none;
+font-size:16px;
+min-height:42px;
+padding:9px
 }
+
 .send{
-  border:0;
-  background:#8b7cff;
-  color:white;
-  width:44px;
-  height:44px;
-  border-radius:13px;
-  font-size:20px;
-  cursor:pointer
+border:0;
+background:#8b7cff;
+color:white;
+width:44px;
+height:44px;
+border-radius:13px;
+font-size:20px;
+cursor:pointer
 }
+
 .send:disabled{opacity:.5}
-.hint{text-align:center;color:#666e7c;font-size:11px;margin-top:8px}
-.msg{max-width:900px;margin:18px auto;padding:16px;border-radius:14px;white-space:pre-wrap;line-height:1.55}
-.user{background:#151922;border:1px solid #252b37}
+
+.hint{
+text-align:center;
+color:#666e7c;
+font-size:11px;
+margin-top:8px
+}
+
+.msg{
+max-width:900px;
+margin:18px auto;
+padding:16px;
+border-radius:14px;
+white-space:pre-wrap;
+line-height:1.55
+}
+
+.user{
+background:#151922;
+border:1px solid #252b37
+}
+
 .ai{color:#d7dbe4}
-.who{font-weight:800;margin-bottom:7px}
+
+.who{
+font-weight:800;
+margin-bottom:7px
+}
+
 .ai .who{color:#8b7cff}
 
 @media(max-width:800px){
-  .side{width:190px}
-  .grid{grid-template-columns:1fr}
-  .chat,.composer{padding-left:5%;padding-right:5%}
+.side{width:190px}
+.grid{grid-template-columns:1fr}
+.chat,.composer{
+padding-left:5%;
+padding-right:5%
+}
 }
 </style>
 </head>
@@ -164,8 +194,12 @@ Created by Luis Gabriel Marino<br>
 
 <div class="box">
 
-<!-- IMAGE UPLOAD -->
-<input type="file" id="imageInput" accept="image/*" style="display:none">
+<input
+type="file"
+id="imageInput"
+accept="image/*"
+style="display:none"
+>
 
 <button
 type="button"
@@ -177,9 +211,15 @@ onclick="document.getElementById('imageInput').click()">
 <textarea
 id="input"
 placeholder="Ask Infinity AI anything..."
-onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}">
+</textarea>
 
-<button class="send" id="send" onclick="send()">➤</button>
+<button
+class="send"
+id="send"
+onclick="send()">
+➤
+</button>
 
 </div>
 
@@ -198,135 +238,199 @@ let currentMode="General";
 const history=[];
 
 function fill(t){
-  document.getElementById('input').value=t;
-  document.getElementById('input').focus();
+document.getElementById('input').value=t;
+document.getElementById('input').focus();
 }
 
 function mode(m){
-  currentMode=m;
-  document.getElementById('mode').textContent=m;
+currentMode=m;
+document.getElementById('mode').textContent=m;
 }
 
 function newChat(){
-  history.length=0;
 
-  document.getElementById('chat').innerHTML=
-  '<div class="hero" id="hero">'+
-  '<div style="font-size:42px">∞</div>'+
-  '<h1>New chat</h1>'+
-  '<p>What do you want Infinity AI to do?</p>'+
-  '</div>';
+history.length=0;
 
-  document.getElementById('mode').textContent='General';
-  currentMode='General';
+document.getElementById('chat').innerHTML=
+'<div class="hero" id="hero">'+
+'<div style="font-size:42px">∞</div>'+
+'<h1>New chat</h1>'+
+'<p>What do you want Infinity AI to do?</p>'+
+'</div>';
+
+document.getElementById('mode').textContent='General';
+currentMode='General';
 }
 
 function esc(s){
-  return String(s).replace(
-    /[&<>"']/g,
-    c=>({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[c])
-  );
+
+return String(s).replace(
+/[&<>"']/g,
+c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c])
+);
+
 }
 
 function addMessage(type,text){
 
-  const hero=document.getElementById("hero");
+const hero=document.getElementById("hero");
 
-  if(hero) hero.remove();
+if(hero) hero.remove();
 
-  const c=document.getElementById('chat');
+const c=document.getElementById('chat');
 
-  const div=document.createElement("div");
+const div=document.createElement("div");
 
-  div.className="msg "+type;
+div.className="msg "+type;
 
-  div.innerHTML=
-    '<div class="who">'+
-    (type==="user"?"You":"∞ Infinity AI")+
-    '</div>'+
-    '<div>'+esc(text)+'</div>';
+div.innerHTML=
+'<div class="who">'+
+(type==="user"?"You":"∞ Infinity AI")+
+'</div>'+
+'<div>'+esc(text)+'</div>';
 
-  c.appendChild(div);
+c.appendChild(div);
 
-  c.scrollTop=c.scrollHeight;
+c.scrollTop=c.scrollHeight;
 
-  return div;
+return div;
 }
 
 async function send(){
 
-  const input=document.getElementById('input');
-  const btn=document.getElementById('send');
+const input=document.getElementById('input');
+const btn=document.getElementById('send');
+const imageInput=document.getElementById('imageInput');
 
-  const text=input.value.trim();
+const text=input.value.trim();
+const file=imageInput.files[0];
 
-  if(!text||btn.disabled)return;
+if((!text&&!file)||btn.disabled)return;
 
-  addMessage("user",text);
+let imageData=null;
 
-  input.value="";
-  btn.disabled=true;
-  btn.textContent="…";
+if(file){
 
-  const thinking=addMessage("ai","Thinking…");
+imageData=await new Promise((resolve,reject)=>{
 
-  try{
+const reader=new FileReader();
 
-    const res=await fetch("/api/chat",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
+reader.onload=()=>{
+resolve(reader.result);
+};
 
-      body:JSON.stringify({
-        messages:[
-          ...history.slice(-12),
-          {
-            role:"user",
-            content:text
-          }
-        ]
-      })
-    });
+reader.onerror=reject;
 
-    const data=await res.json();
+reader.readAsDataURL(file);
 
-    thinking.remove();
+});
 
-    const answer=
-      data.reply ||
-      data.error ||
-      "I couldn't answer that.";
+}
 
-    addMessage("ai",answer);
+addMessage(
+"user",
+text || "📷 Image"
+);
 
-    history.push(
-      {role:"user",content:text},
-      {role:"assistant",content:answer}
-    );
+input.value="";
+imageInput.value="";
 
-  }catch(e){
+btn.disabled=true;
+btn.textContent="…";
 
-    thinking.remove();
+const thinking=addMessage(
+"ai",
+"Looking at it…"
+);
 
-    addMessage(
-      "ai",
-      "Infinity AI couldn't reach its AI server. Check that your API key is configured on the website host."
-    );
+try{
 
-  }finally{
+const message={
+role:"user",
+content:[]
+};
 
-    btn.disabled=false;
-    btn.textContent="➤";
-    input.focus();
+if(text){
 
-  }
+message.content.push({
+type:"text",
+text:text
+});
+
+}
+
+if(imageData){
+
+message.content.push({
+type:"image_url",
+image_url:{
+url:imageData
+}
+});
+
+}
+
+const res=await fetch(
+"/api/chat",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+messages:[
+...history.slice(-12),
+message
+]
+})
+}
+);
+
+const data=await res.json();
+
+thinking.remove();
+
+const answer=
+data.reply ||
+data.error ||
+"I couldn't answer that.";
+
+addMessage(
+"ai",
+answer
+);
+
+history.push(
+message,
+{
+role:"assistant",
+content:answer
+}
+);
+
+}catch(e){
+
+thinking.remove();
+
+addMessage(
+"ai",
+"Infinity AI couldn't reach its AI server."
+);
+
+}finally{
+
+btn.disabled=false;
+btn.textContent="➤";
+input.focus();
+
+}
+
 }
 
 </script>
