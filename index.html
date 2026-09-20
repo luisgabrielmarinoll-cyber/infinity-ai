@@ -12,74 +12,111 @@ body{
 margin:0;
 font-family:Arial,sans-serif;
 background:#0b0b0f;
-color:white;
-display:flex;
+color:#fff;
 height:100vh;
+display:flex;
 overflow:hidden;
 }
 
+/* SIDEBAR */
 .sidebar{
-width:240px;
+width:270px;
 background:#111116;
-padding:20px;
-border-right:1px solid #25252d;
+border-right:1px solid #292932;
+display:flex;
+flex-direction:column;
+padding:14px;
 }
 
 .logo{
-font-size:24px;
+font-size:22px;
 font-weight:bold;
-margin-bottom:25px;
+padding:10px;
+margin-bottom:12px;
 }
 
-.mode{
+.new-chat{
+width:100%;
 padding:12px;
-margin:6px 0;
 border-radius:10px;
-cursor:pointer;
-background:#181820;
-}
-
-.mode:hover{
 background:#24242d;
+color:white;
+border:1px solid #35353f;
+cursor:pointer;
+font-size:14px;
+margin-bottom:15px;
 }
 
-.creator{
-position:absolute;
-bottom:15px;
+.new-chat:hover{
+background:#30303a;
+}
+
+.chat-list{
+flex:1;
+overflow-y:auto;
+}
+
+.chat-item{
+padding:11px 12px;
+border-radius:9px;
+margin-bottom:4px;
+cursor:pointer;
+font-size:14px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.chat-item:hover{
+background:#22222a;
+}
+
+.chat-item.active{
+background:#292933;
+}
+
+.bottom{
 font-size:12px;
 color:#888;
+padding:12px 8px;
+border-top:1px solid #292932;
 }
 
+/* MAIN */
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
+min-width:0;
 }
 
 .header{
-padding:18px 25px;
-border-bottom:1px solid #25252d;
-font-size:20px;
+height:60px;
+border-bottom:1px solid #292932;
+display:flex;
+align-items:center;
+padding:0 22px;
+font-size:18px;
 font-weight:bold;
 }
 
 .chat{
 flex:1;
 overflow-y:auto;
-padding:25px;
+padding:25px 20px 120px;
 }
 
 .message{
-max-width:750px;
+max-width:780px;
+margin:14px auto;
 padding:14px 17px;
-margin:12px auto;
 border-radius:15px;
 line-height:1.5;
 white-space:pre-wrap;
 }
 
 .user{
-background:#24243a;
+background:#29293a;
 }
 
 .ai{
@@ -87,80 +124,114 @@ background:#17171e;
 }
 
 .message img{
-max-width:300px;
+max-width:330px;
+max-height:330px;
 border-radius:12px;
-margin-top:10px;
 display:block;
+margin-top:10px;
+}
+
+/* COMPOSER */
+.composer-wrap{
+position:absolute;
+bottom:0;
+left:270px;
+right:0;
+padding:15px 20px 20px;
+background:linear-gradient(transparent,#0b0b0f 25%);
 }
 
 .composer{
-padding:18px;
-border-top:1px solid #25252d;
+max-width:800px;
+margin:auto;
 display:flex;
-gap:10px;
+gap:8px;
+background:#181820;
+border:1px solid #34343e;
+border-radius:16px;
+padding:8px;
 }
 
 textarea{
 flex:1;
+height:44px;
 resize:none;
-height:55px;
-background:#181820;
-border:1px solid #30303a;
-border-radius:14px;
+border:0;
+outline:0;
+background:transparent;
 color:white;
-padding:15px;
+padding:12px;
 font-size:15px;
-outline:none;
 }
 
 button{
 border:0;
-border-radius:12px;
-padding:0 18px;
-font-size:18px;
 cursor:pointer;
-background:#292936;
 color:white;
+background:#292932;
+border-radius:11px;
+padding:0 14px;
+font-size:17px;
 }
 
 .send{
-background:#ffffff;
-color:#000;
+background:white;
+color:black;
 }
 
-.clear{
-font-size:13px;
-padding:8px 12px;
-margin-left:10px;
+.disclaimer{
+text-align:center;
+font-size:11px;
+color:#777;
+margin-top:7px;
 }
 
 @media(max-width:700px){
-.sidebar{display:none}
+
+.sidebar{
+width:210px;
+}
+
+.composer-wrap{
+left:210px;
+}
+
+}
+
+@media(max-width:550px){
+
+.sidebar{
+display:none;
+}
+
+.composer-wrap{
+left:0;
+}
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">∞ Infinity AI</div>
 
-<div class="mode">🧠 Study</div>
-<div class="mode">🎨 Art</div>
-<div class="mode">🔎 Research</div>
-<div class="mode">✍️ Write</div>
-<div class="mode">💻 Code</div>
-<div class="mode">📷 Images</div>
+<button class="new-chat" onclick="newChat()">
+＋ New chat
+</button>
 
-<button class="clear" onclick="clearChat()">🗑️ Clear chat</button>
+<div id="chatList" class="chat-list"></div>
 
-<div class="creator">
+<div class="bottom">
 Created by Luis Gabriel Marino
 </div>
 
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
 <div class="header">
@@ -168,6 +239,8 @@ Infinity AI
 </div>
 
 <div id="chat" class="chat"></div>
+
+<div class="composer-wrap">
 
 <div class="composer">
 
@@ -179,7 +252,6 @@ style="display:none"
 >
 
 <button
-type="button"
 onclick="document.getElementById('imageInput').click()">
 📎
 </button>
@@ -198,23 +270,110 @@ onclick="send()">
 
 </div>
 
+<div class="disclaimer">
+Infinity AI can make mistakes. Check important information.
+</div>
+
+</div>
+
 </div>
 
 <script>
 
-let history =
-JSON.parse(localStorage.getItem("infinity_history") || "[]");
+let conversations =
+JSON.parse(localStorage.getItem("infinity_conversations") || "[]");
 
-function saveHistory(){
+let currentChat =
+localStorage.getItem("infinity_current_chat");
 
+if(!currentChat || !conversations.find(c=>c.id===currentChat)){
+currentChat=null;
+}
+
+function save(){
 localStorage.setItem(
-"infinity_history",
-JSON.stringify(history)
+"infinity_conversations",
+JSON.stringify(conversations)
+);
+
+if(currentChat){
+localStorage.setItem(
+"infinity_current_chat",
+currentChat
+);
+}
+}
+
+function createConversation(){
+
+const chat={
+id:Date.now().toString(),
+title:"New chat",
+messages:[]
+};
+
+conversations.unshift(chat);
+
+currentChat=chat.id;
+
+save();
+
+renderSidebar();
+
+renderChat();
+
+}
+
+function getCurrent(){
+
+return conversations.find(
+c=>c.id===currentChat
 );
 
 }
 
-function addMessage(role,text,image=null){
+function newChat(){
+
+createConversation();
+
+}
+
+function renderSidebar(){
+
+const list=document.getElementById("chatList");
+
+list.innerHTML="";
+
+for(const c of conversations){
+
+const item=document.createElement("div");
+
+item.className=
+"chat-item "+
+(c.id===currentChat?"active":"");
+
+item.textContent=
+c.title || "New chat";
+
+item.onclick=()=>{
+
+currentChat=c.id;
+
+save();
+
+renderSidebar();
+
+renderChat();
+
+};
+
+list.appendChild(item);
+
+}
+
+}
+
+function addMessage(role,text,image){
 
 const chat=document.getElementById("chat");
 
@@ -242,36 +401,42 @@ return div;
 
 }
 
-function loadChat(){
+function renderChat(){
 
-document.getElementById("chat").innerHTML="";
+const area=document.getElementById("chat");
 
-for(const msg of history){
+area.innerHTML="";
 
-if(msg.role==="user"){
+const current=getCurrent();
 
-addMessage(
-"user",
-msg.text || "📷 Image",
-msg.image
-);
-
-}else if(msg.role==="assistant"){
+if(!current){
 
 addMessage(
 "ai",
-msg.content
+"Hey 👋 I'm Infinity AI. Start a new chat!"
 );
 
-}
+return;
 
 }
 
-if(history.length===0){
+if(current.messages.length===0){
 
 addMessage(
 "ai",
 "Hey 👋 I'm Infinity AI. How can I help?"
+);
+
+return;
+
+}
+
+for(const m of current.messages){
+
+addMessage(
+m.role,
+m.text || m.content || "",
+m.image
 );
 
 }
@@ -291,6 +456,14 @@ const text=input.value.trim();
 const file=imageInput.files[0];
 
 if((!text&&!file)||btn.disabled)return;
+
+if(!currentChat){
+
+createConversation();
+
+}
+
+const current=getCurrent();
 
 let imageData=null;
 
@@ -313,21 +486,25 @@ reader.readAsDataURL(file);
 
 }
 
-addMessage(
-"user",
-text || "📷 Image",
-imageData
-);
-
-const userHistory={
+current.messages.push({
 role:"user",
 text:text,
 image:imageData
-};
+});
 
-history.push(userHistory);
+if(current.title==="New chat"){
 
-saveHistory();
+current.title=
+text ||
+"📷 Image chat";
+
+}
+
+save();
+
+renderSidebar();
+
+renderChat();
 
 input.value="";
 
@@ -344,54 +521,29 @@ const thinking=addMessage(
 
 try{
 
-const message={
-role:"user",
-content:[]
-};
-
-if(text){
-
-message.content.push({
-type:"text",
-text:text
-});
-
-}
-
-if(imageData){
-
-message.content.push({
-type:"image_url",
-image_url:{
-url:imageData
-}
-});
-
-}
-
 const apiMessages=[];
 
-for(const item of history){
+for(const m of current.messages){
 
-if(item.role==="user"){
+if(m.role==="user"){
 
 const content=[];
 
-if(item.text){
+if(m.text){
 
 content.push({
 type:"text",
-text:item.text
+text:m.text
 });
 
 }
 
-if(item.image){
+if(m.image){
 
 content.push({
 type:"image_url",
 image_url:{
-url:item.image
+url:m.image
 }
 });
 
@@ -406,7 +558,7 @@ content:content
 
 apiMessages.push({
 role:"assistant",
-content:item.content
+content:m.content
 });
 
 }
@@ -435,17 +587,14 @@ data.reply ||
 data.error ||
 "Infinity AI couldn't answer.";
 
-addMessage(
-"ai",
-answer
-);
-
-history.push({
+current.messages.push({
 role:"assistant",
 content:answer
 });
 
-saveHistory();
+save();
+
+renderChat();
 
 }catch(error){
 
@@ -468,26 +617,8 @@ input.focus();
 
 }
 
-function clearChat(){
-
-if(confirm("Delete this conversation?")){
-
-history=[];
-
-localStorage.removeItem(
-"infinity_history"
-);
-
-loadChat();
-
-}
-
-}
-
 document.getElementById("input")
-.addEventListener(
-"keydown",
-function(e){
+.addEventListener("keydown",function(e){
 
 if(e.key==="Enter"&&!e.shiftKey){
 
@@ -499,7 +630,8 @@ send();
 
 });
 
-loadChat();
+renderSidebar();
+renderChat();
 
 </script>
 
