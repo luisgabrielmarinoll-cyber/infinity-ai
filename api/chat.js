@@ -21,7 +21,7 @@ export default async function handler(req, res) {
           "X-Title": "Infinity AI"
         },
         body: JSON.stringify({
-          model: "openrouter/free",
+          model: "google/gemma-4-31b-it:free",
           messages: messages
         })
       }
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.error?.message || "OpenRouter request failed"
+        error: data.error?.message || "AI request failed"
       });
     }
 
@@ -39,12 +39,12 @@ export default async function handler(req, res) {
       data.choices?.[0]?.message?.content ||
       "No response";
 
-    res.status(200).json({
+    return res.status(200).json({
       reply: reply
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       error: error.message || "Server error"
     });
   }
