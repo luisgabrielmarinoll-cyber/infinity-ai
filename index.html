@@ -1,27 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="google-site-verification" content="v4QtDsrgMCMUkmsPv1Xm5n09J2L-ek78N09WDzShApo" />
+<head>
+<meta name="google-site-verification" content="v4QtDsrgMCMUkmsPv1Xm5n09J2L-ek78N09WDzShApo" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Infinity AI</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b0d12;color:#f5f7fb}
-.app{display:flex;height:100vh}.side{width:245px;background:#11141b;border-right:1px solid #252a35;padding:20px;display:flex;flex-direction:column}
-.logo{font-size:24px;font-weight:800;margin-bottom:28px}.logo span{color:#8b7cff}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b0d12;color:#f5f7fb}
+.app{display:flex;height:100vh}
+.side{width:245px;background:#11141b;border-right:1px solid #252a35;padding:20px;display:flex;flex-direction:column}
+.logo{font-size:24px;font-weight:800;margin-bottom:28px}
+.logo span{color:#8b7cff}
 .new{background:#8b7cff;color:white;border:0;border-radius:12px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
-.nav{margin-top:25px;display:grid;gap:8px}.nav button{background:transparent;border:0;color:#c5cad5;text-align:left;padding:11px;border-radius:9px;cursor:pointer}.nav button:hover{background:#1c2029;color:white}
-.bottom{margin-top:auto;color:#7f8796;font-size:12px}.main{flex:1;display:flex;flex-direction:column}.top{height:65px;border-bottom:1px solid #252a35;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.badge{font-size:12px;background:#1b2030;padding:7px 10px;border-radius:999px;color:#aaa4ff}
-.chat{flex:1;overflow:auto;padding:40px 10%}.hero{text-align:center;max-width:800px;margin:0 auto}.hero h1{font-size:48px;margin:20px 0 10px}.hero p{color:#9ba3b2;font-size:17px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:35px}.card{background:#141820;border:1px solid #252b37;border-radius:14px;padding:18px;text-align:left;cursor:pointer}.card:hover{border-color:#655bd6}.card b{display:block;margin-bottom:7px}.card small{color:#8e96a5}
-.composer{padding:18px 10% 25px}.box{max-width:900px;margin:auto;background:#151922;border:1px solid #303644;border-radius:18px;padding:12px;display:flex;align-items:flex-end;gap:10px}.box textarea{flex:1;background:transparent;border:0;outline:0;color:white;resize:none;font-size:16px;min-height:42px;padding:9px}.send{border:0;background:#8b7cff;color:white;width:44px;height:44px;border-radius:13px;font-size:20px;cursor:pointer}.send:disabled{opacity:.5}.hint{text-align:center;color:#666e7c;font-size:11px;margin-top:8px}
-.msg{max-width:900px;margin:18px auto;padding:16px;border-radius:14px;white-space:pre-wrap;line-height:1.55}.user{background:#151922;border:1px solid #252b37}.ai{color:#d7dbe4}.who{font-weight:800;margin-bottom:7px}.ai .who{color:#8b7cff}
-@media(max-width:800px){.side{width:190px}.grid{grid-template-columns:1fr}.chat,.composer{padding-left:5%;padding-right:5%}}
+.nav{margin-top:25px;display:grid;gap:8px}
+.nav button{background:transparent;border:0;color:#c5cad5;text-align:left;padding:11px;border-radius:9px;cursor:pointer}
+.nav button:hover{background:#1c2029;color:white}
+.bottom{margin-top:auto;color:#7f8796;font-size:12px}
+.main{flex:1;display:flex;flex-direction:column}
+.top{height:65px;border-bottom:1px solid #252a35;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.badge{font-size:12px;background:#1b2030;padding:7px 10px;border-radius:999px;color:#aaa4ff}
+.chat{flex:1;overflow:auto;padding:40px 10%}
+.hero{text-align:center;max-width:800px;margin:0 auto}
+.hero h1{font-size:48px;margin:20px 0 10px}
+.hero p{color:#9ba3b2;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:35px}
+.card{background:#141820;border:1px solid #252b37;border-radius:14px;padding:18px;text-align:left;cursor:pointer}
+.card:hover{border-color:#655bd6}
+.card b{display:block;margin-bottom:7px}
+.card small{color:#8e96a5}
+
+.composer{padding:18px 10% 25px}
+.box{
+  max-width:900px;
+  margin:auto;
+  background:#151922;
+  border:1px solid #303644;
+  border-radius:18px;
+  padding:12px;
+  display:flex;
+  align-items:flex-end;
+  gap:10px
+}
+.box textarea{
+  flex:1;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:white;
+  resize:none;
+  font-size:16px;
+  min-height:42px;
+  padding:9px
+}
+.send{
+  border:0;
+  background:#8b7cff;
+  color:white;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  font-size:20px;
+  cursor:pointer
+}
+.send:disabled{opacity:.5}
+.hint{text-align:center;color:#666e7c;font-size:11px;margin-top:8px}
+.msg{max-width:900px;margin:18px auto;padding:16px;border-radius:14px;white-space:pre-wrap;line-height:1.55}
+.user{background:#151922;border:1px solid #252b37}
+.ai{color:#d7dbe4}
+.who{font-weight:800;margin-bottom:7px}
+.ai .who{color:#8b7cff}
+
+@media(max-width:800px){
+  .side{width:190px}
+  .grid{grid-template-columns:1fr}
+  .chat,.composer{padding-left:5%;padding-right:5%}
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
+
 <aside class="side">
+
 <div class="logo">∞ <span>Infinity AI</span></div>
+
 <button class="new" onclick="newChat()">+ New chat</button>
+
 <div class="nav">
 <button onclick="mode('Study')">📚 Study</button>
 <button onclick="mode('Art')">🎨 Create Art</button>
@@ -30,68 +98,238 @@
 <button onclick="mode('Code')">💻 Code</button>
 <button onclick="mode('Images')">🖼️ Images</button>
 </div>
-<div class="bottom">Created by Luis Gabriel Marino<br>∞ Real AI build v2.0</div>
+
+<div class="bottom">
+Created by Luis Gabriel Marino<br>
+∞ Real AI build v2.0
+</div>
+
 </aside>
+
 <main class="main">
-<header class="top"><strong id="mode">General</strong><span class="badge">∞ MULTI-MODE AI</span></header>
+
+<header class="top">
+<strong id="mode">General</strong>
+<span class="badge">∞ MULTI-MODE AI</span>
+</header>
+
 <section class="chat" id="chat">
+
 <div class="hero" id="hero">
+
 <div style="font-size:42px">∞</div>
+
 <h1>What can I help you do?</h1>
+
 <p>Ask anything. Infinity AI chooses the right style for your task.</p>
+
 <div class="grid">
-<div class="card" onclick="fill('Explain photosynthesis for IGCSE in simple words')"><b>📚 Study</b><small>Explain, quiz, revise and practise.</small></div>
-<div class="card" onclick="fill('Give me ideas for an IGCSE Art theme about Changing Time')"><b>🎨 Art</b><small>Develop ideas and visual references.</small></div>
-<div class="card" onclick="fill('Explain this topic clearly and tell me what facts I should check')"><b>🔎 Research</b><small>Help analyze information.</small></div>
-<div class="card" onclick="fill('Rewrite this text so it sounds clear and natural')"><b>✍️ Writing</b><small>Draft, rewrite and improve text.</small></div>
-<div class="card" onclick="fill('Help me build a website')"><b>💻 Code</b><small>Build and debug projects.</small></div>
-<div class="card" onclick="fill('Give me a prompt for an image of a futuristic city')"><b>🖼️ Images</b><small>Create image prompts and ideas.</small></div>
+
+<div class="card" onclick="fill('Explain photosynthesis for IGCSE in simple words')">
+<b>📚 Study</b>
+<small>Explain, quiz, revise and practise.</small>
+</div>
+
+<div class="card" onclick="fill('Give me ideas for an IGCSE Art theme about Changing Time')">
+<b>🎨 Art</b>
+<small>Develop ideas and visual references.</small>
+</div>
+
+<div class="card" onclick="fill('Explain this topic clearly and tell me what facts I should check')">
+<b>🔎 Research</b>
+<small>Help analyze information.</small>
+</div>
+
+<div class="card" onclick="fill('Rewrite this text so it sounds clear and natural')">
+<b>✍️ Write</b>
+<small>Draft, rewrite and improve text.</small>
+</div>
+
+<div class="card" onclick="fill('Help me build a website')">
+<b>💻 Code</b>
+<small>Build and debug projects.</small>
+</div>
+
+<div class="card" onclick="fill('Give me a prompt for an image of a futuristic city')">
+<b>🖼️ Images</b>
+<small>Create image prompts and ideas.</small>
+</div>
+
 </div>
 </div>
+
 </section>
+
 <section class="composer">
-<div class="box"><textarea id="input" placeholder="Ask Infinity AI anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea><button class="send" id="send" onclick="send()">➤</button></div>
-<div class="hint">Infinity AI • AI-style personality • Created by Luis Gabriel Marino</div>
+
+<div class="box">
+
+<!-- IMAGE UPLOAD -->
+<input type="file" id="imageInput" accept="image/*" style="display:none">
+
+<button
+type="button"
+class="send"
+onclick="document.getElementById('imageInput').click()">
+📎
+</button>
+
+<textarea
+id="input"
+placeholder="Ask Infinity AI anything..."
+onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+
+<button class="send" id="send" onclick="send()">➤</button>
+
+</div>
+
+<div class="hint">
+Infinity AI • AI-style personality • Created by Luis Gabriel Marino
+</div>
+
 </section>
+
 </main>
 </div>
+
 <script>
+
 let currentMode="General";
 const history=[];
 
-function fill(t){document.getElementById('input').value=t;document.getElementById('input').focus()}
-function mode(m){currentMode=m;document.getElementById('mode').textContent=m}
-function newChat(){history.length=0;document.getElementById('chat').innerHTML='<div class="hero" id="hero"><div style="font-size:42px">∞</div><h1>New chat</h1><p>What do you want Infinity AI to do?</p></div>';document.getElementById('mode').textContent='General';currentMode='General'}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fill(t){
+  document.getElementById('input').value=t;
+  document.getElementById('input').focus();
+}
+
+function mode(m){
+  currentMode=m;
+  document.getElementById('mode').textContent=m;
+}
+
+function newChat(){
+  history.length=0;
+
+  document.getElementById('chat').innerHTML=
+  '<div class="hero" id="hero">'+
+  '<div style="font-size:42px">∞</div>'+
+  '<h1>New chat</h1>'+
+  '<p>What do you want Infinity AI to do?</p>'+
+  '</div>';
+
+  document.getElementById('mode').textContent='General';
+  currentMode='General';
+}
+
+function esc(s){
+  return String(s).replace(
+    /[&<>"']/g,
+    c=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
+}
 
 function addMessage(type,text){
-  const hero=document.getElementById("hero"); if(hero) hero.remove();
+
+  const hero=document.getElementById("hero");
+
+  if(hero) hero.remove();
+
   const c=document.getElementById('chat');
+
   const div=document.createElement("div");
+
   div.className="msg "+type;
-  div.innerHTML='<div class="who">'+(type==="user"?"You":"∞ Infinity AI")+'</div><div>'+esc(text)+'</div>';
-  c.appendChild(div); c.scrollTop=c.scrollHeight;
+
+  div.innerHTML=
+    '<div class="who">'+
+    (type==="user"?"You":"∞ Infinity AI")+
+    '</div>'+
+    '<div>'+esc(text)+'</div>';
+
+  c.appendChild(div);
+
+  c.scrollTop=c.scrollHeight;
+
   return div;
 }
 
 async function send(){
-  const input=document.getElementById('input'), btn=document.getElementById('send');
-  const text=input.value.trim(); if(!text||btn.disabled)return;
-  addMessage("user",text); input.value=""; btn.disabled=true; btn.textContent="…";
+
+  const input=document.getElementById('input');
+  const btn=document.getElementById('send');
+
+  const text=input.value.trim();
+
+  if(!text||btn.disabled)return;
+
+  addMessage("user",text);
+
+  input.value="";
+  btn.disabled=true;
+  btn.textContent="…";
+
   const thinking=addMessage("ai","Thinking…");
+
   try{
-    const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({messages:[...history.slice(-12),{role:"user",content:text}]})});
+
+    const res=await fetch("/api/chat",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        messages:[
+          ...history.slice(-12),
+          {
+            role:"user",
+            content:text
+          }
+        ]
+      })
+    });
+
     const data=await res.json();
+
     thinking.remove();
-    const answer=data.reply || data.error || "I couldn't answer that.";
+
+    const answer=
+      data.reply ||
+      data.error ||
+      "I couldn't answer that.";
+
     addMessage("ai",answer);
-    history.push({role:"user",content:text},{role:"assistant",content:answer});
+
+    history.push(
+      {role:"user",content:text},
+      {role:"assistant",content:answer}
+    );
+
   }catch(e){
+
     thinking.remove();
-    addMessage("ai","Infinity AI couldn't reach its AI server. Check that your API key is configured on the website host.");
-  }finally{btn.disabled=false;btn.textContent="➤";input.focus()}
+
+    addMessage(
+      "ai",
+      "Infinity AI couldn't reach its AI server. Check that your API key is configured on the website host."
+    );
+
+  }finally{
+
+    btn.disabled=false;
+    btn.textContent="➤";
+    input.focus();
+
+  }
 }
+
 </script>
+
 </body>
 </html>
