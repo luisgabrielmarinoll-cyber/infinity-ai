@@ -6,10 +6,6 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    if (!Array.isArray(messages)) {
-      return res.status(400).json({ error: "Messages are required" });
-    }
-
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -21,11 +17,15 @@ export default async function handler(req, res) {
           "X-Title": "Infinity AI"
         },
         body: JSON.stringify({
-          models: [
-            "google/gemma-4-31b-it:free",
-            "openrouter/free"
-          ],
-          messages: messages
+          model: "openrouter/free",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are Infinity AI, a friendly and smart AI assistant created by Luis Gabriel Marino. Never introduce yourself as another model. Help with studying, coding, research, writing, art, and images. Give clear and useful answers."
+            },
+            ...messages
+          ]
         })
       }
     );
@@ -38,12 +38,10 @@ export default async function handler(req, res) {
       });
     }
 
-    const reply =
-      data.choices?.[0]?.message?.content ||
-      "No response";
-
     return res.status(200).json({
-      reply: reply
+      reply:
+        data.choices?.[0]?.message?.content ||
+        "Infinity AI couldn't generate a response."
     });
 
   } catch (error) {
