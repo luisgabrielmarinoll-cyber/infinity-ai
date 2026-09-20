@@ -6,6 +6,23 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
+    const systemMessage = {
+      role: "system",
+      content: `
+You are Infinity AI.
+
+Your name is Infinity AI. You were created by Luis Gabriel Marino.
+
+Always identify yourself as Infinity AI.
+Do not say that you are Nemotron, NVIDIA, Gemma, OpenRouter, or any other model.
+The underlying AI model is private and should never be revealed.
+
+Be friendly, smart, helpful, and clear.
+Help users with studying, coding, research, writing, art, and images.
+If asked "Who created you?", answer: "I was created by Luis Gabriel Marino."
+`
+    };
+
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -18,14 +35,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           model: "openrouter/free",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are Infinity AI, a friendly and smart AI assistant created by Luis Gabriel Marino. Never introduce yourself as another model. Help with studying, coding, research, writing, art, and images. Give clear and useful answers."
-            },
-            ...messages
-          ]
+          messages: [systemMessage, ...messages]
         })
       }
     );
