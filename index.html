@@ -1,102 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Infinity AI</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #ffffff;
-      color: #1f1f1f;
+      color: #111111;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    /* LOGIN */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 22px;
+      padding: 35px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 55px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .login-title {
+      text-align: center;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: #777;
+      margin: 8px 0 25px;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .switch-login {
+      text-align: center;
+      margin-top: 18px;
+      color: #666;
+    }
+
+    .switch-login button {
+      border: 0;
+      background: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-error {
+      color: #d00;
+      text-align: center;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+
+    /* APP */
+
+    #app {
+      display: none;
       height: 100vh;
       overflow: hidden;
     }
 
-    .app {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* SIDEBAR */
     .sidebar {
       width: 270px;
-      background: #f7f7f8;
+      height: 100vh;
+      background: #f7f7f7;
       border-right: 1px solid #e5e5e5;
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
     }
 
     .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: 21px;
-      font-weight: 700;
-      margin-bottom: 20px;
+      font-weight: bold;
+      padding: 10px;
     }
 
-    .brand span {
-      font-weight: 400;
+    .brand-icon {
+      font-size: 30px;
     }
 
     .new-chat {
+      width: 100%;
+      padding: 13px;
       border: 1px solid #ddd;
-      background: white;
-      padding: 12px 15px;
       border-radius: 12px;
+      background: white;
       cursor: pointer;
-      font-size: 15px;
       text-align: left;
-      margin-bottom: 18px;
+      font-weight: bold;
+      margin: 10px 0;
     }
 
-    .new-chat:hover {
-      background: #eeeeef;
-    }
-
-    .section-title {
+    .history-title {
       font-size: 12px;
       color: #777;
-      margin: 10px 5px;
+      padding: 10px;
       text-transform: uppercase;
     }
 
-    .mode {
-      padding: 10px 12px;
+    #chatHistory {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      padding: 11px;
       border-radius: 10px;
       cursor: pointer;
       margin-bottom: 4px;
-      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .mode:hover {
-      background: #e9e9ea;
+    .history-item:hover {
+      background: #e9e9e9;
     }
 
-    .mode.active {
-      background: #e3e3e4;
-      font-weight: 600;
+    .profile {
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
     }
 
-    .creator {
-      margin-top: auto;
-      font-size: 12px;
+    .profile-name {
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .logout {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      padding: 9px;
+      text-align: left;
+      cursor: pointer;
       color: #777;
-      padding: 10px 5px;
     }
 
-    /* MAIN */
     .main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-width: 0;
+      height: 100vh;
     }
 
     .topbar {
@@ -104,195 +202,106 @@
       border-bottom: 1px solid #eee;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       padding: 0 22px;
+      font-weight: bold;
     }
 
-    .model-name {
-      font-weight: 600;
-      font-size: 16px;
+    .mode {
+      margin-left: auto;
+      font-size: 13px;
+      color: #777;
     }
 
-    .model-badge {
-      font-size: 12px;
-      background: #f0f0f0;
-      padding: 5px 9px;
-      border-radius: 8px;
-      margin-left: 7px;
-      color: #555;
-    }
-
-    .chat {
+    #messages {
       flex: 1;
       overflow-y: auto;
-      padding: 30px 20px 130px;
+      padding: 30px;
     }
 
     .welcome {
-      max-width: 760px;
-      margin: 12vh auto 0;
+      max-width: 800px;
+      margin: 100px auto;
       text-align: center;
     }
 
-    .logo {
-      font-size: 44px;
-      margin-bottom: 12px;
-    }
-
     .welcome h1 {
-      font-size: 32px;
+      font-size: 42px;
       margin-bottom: 10px;
     }
 
     .welcome p {
       color: #777;
-      margin-bottom: 28px;
+      font-size: 17px;
     }
 
-    .suggestions {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      max-width: 650px;
-      margin: auto;
+    .message {
+      max-width: 850px;
+      margin: 0 auto 20px;
+      padding: 15px 18px;
+      border-radius: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
 
-    .suggestion {
-      background: #fafafa;
-      border: 1px solid #e4e4e4;
-      padding: 15px;
-      border-radius: 14px;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .suggestion:hover {
+    .user {
       background: #f1f1f1;
     }
 
-    /* MESSAGES */
-    .message {
-      max-width: 820px;
-      margin: 0 auto 22px;
-      display: flex;
-      gap: 12px;
+    .assistant {
+      background: white;
+      border: 1px solid #eee;
     }
 
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #111;
-      color: white;
-      flex-shrink: 0;
-      font-size: 14px;
-    }
-
-    .message.user .avatar {
-      background: #ddd;
-      color: #222;
-    }
-
-    .message-content {
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      padding-top: 4px;
-    }
-
-    /* INPUT */
     .input-area {
-      position: fixed;
-      bottom: 0;
-      left: 270px;
-      right: 0;
-      background: linear-gradient(
-        transparent,
-        white 25%
-      );
-      padding: 30px 20px 18px;
+      padding: 15px 25px 20px;
+      border-top: 1px solid #eee;
     }
 
     .input-box {
-      max-width: 820px;
+      max-width: 850px;
       margin: auto;
-      border: 1px solid #d8d8d8;
-      border-radius: 18px;
-      background: white;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-      padding: 10px;
-    }
-
-    .input-row {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 10px;
+      border: 1px solid #ddd;
+      border-radius: 18px;
+      padding: 8px;
+      background: white;
     }
 
-    textarea {
+    .input-box input {
       flex: 1;
-      border: none;
-      outline: none;
-      resize: none;
-      font-family: inherit;
-      font-size: 15px;
+      border: 0;
+      outline: 0;
       padding: 10px;
-      min-height: 42px;
-      max-height: 150px;
     }
 
-    .icon-btn,
-    .send-btn {
-      border: none;
-      background: #f0f0f0;
-      width: 40px;
-      height: 40px;
+    .send {
+      border: 0;
       border-radius: 12px;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .send-btn {
       background: #111;
       color: white;
-    }
-
-    .send-btn:hover {
-      opacity: 0.8;
-    }
-
-    .attachment-name {
-      font-size: 12px;
-      color: #666;
-      padding: 5px 10px;
-      display: none;
+      padding: 10px 16px;
+      cursor: pointer;
     }
 
     .disclaimer {
       text-align: center;
-      color: #999;
       font-size: 11px;
+      color: #999;
       margin-top: 8px;
     }
 
     @media (max-width: 700px) {
       .sidebar {
-        display: none;
-      }
-
-      .input-area {
-        left: 0;
-      }
-
-      .suggestions {
-        grid-template-columns: 1fr;
+        width: 210px;
       }
 
       .welcome h1 {
-        font-size: 26px;
+        font-size: 32px;
+      }
+
+      #messages {
+        padding: 15px;
       }
     }
   </style>
@@ -300,338 +309,515 @@
 
 <body>
 
-<div class="app">
+  <!-- LOGIN -->
 
-  <aside class="sidebar">
-    <div class="brand">∞ <span>Infinity AI</span></div>
+  <div id="loginScreen">
 
-    <button class="new-chat" onclick="newChat()">
-      ＋ New chat
-    </button>
+    <div class="login-card">
 
-    <div class="section-title">Modes</div>
+      <div class="logo">∞</div>
 
-    <div class="mode active" onclick="setMode(this, 'General')">💬 General</div>
-    <div class="mode" onclick="setMode(this, 'Study')">📚 Study</div>
-    <div class="mode" onclick="setMode(this, 'Research')">🔎 Research</div>
-    <div class="mode" onclick="setMode(this, 'Write')">✍️ Write</div>
-    <div class="mode" onclick="setMode(this, 'Code')">💻 Code</div>
-    <div class="mode" onclick="setMode(this, 'Art')">🎨 Art</div>
-    <div class="mode" onclick="setMode(this, 'Images')">🖼️ Images</div>
+      <h1 class="login-title">Infinity AI</h1>
 
-    <div class="creator">
-      Created by Luis Gabriel Marino
+      <p class="login-subtitle">
+        Your all-in-one AI assistant
+      </p>
+
+      <input
+        id="nameInput"
+        type="text"
+        placeholder="Your name"
+      >
+
+      <input
+        id="emailInput"
+        type="email"
+        placeholder="Email"
+      >
+
+      <input
+        id="passwordInput"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button class="login-button" onclick="login()">
+        Continue
+      </button>
+
+      <div class="switch-login">
+        <button onclick="demoAccount()">
+          Use demo account
+        </button>
+      </div>
+
+      <div id="loginError" class="login-error"></div>
+
     </div>
-  </aside>
 
-  <main class="main">
+  </div>
 
-    <header class="topbar">
-      <div>
-        <span class="model-name">Infinity AI</span>
-        <span class="model-badge">AI Assistant</span>
+
+  <!-- APP -->
+
+  <div id="app">
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <span class="brand-icon">∞</span>
+        Infinity AI
       </div>
-    </header>
 
-    <section class="chat" id="chat">
+      <button class="new-chat" onclick="newChat()">
+        ＋ New chat
+      </button>
 
-      <div class="welcome" id="welcome">
-        <div class="logo">∞</div>
+      <div class="history-title">
+        Chat history
+      </div>
 
-        <h1>What can I help with?</h1>
+      <div id="chatHistory"></div>
 
-        <p>
-          Infinity AI — your all-in-one AI assistant.
-        </p>
+      <div class="profile">
+        <div class="profile-name" id="profileName"></div>
 
-        <div class="suggestions">
-          <div class="suggestion" onclick="useSuggestion('Help me study for my exam')">
-            📚 Help me study
-          </div>
+        <button class="logout" onclick="logout()">
+          🚪 Log out
+        </button>
+      </div>
 
-          <div class="suggestion" onclick="useSuggestion('Help me write something')">
-            ✍️ Help me write
-          </div>
+    </aside>
 
-          <div class="suggestion" onclick="useSuggestion('Help me create an art idea')">
-            🎨 Create an art idea
-          </div>
 
-          <div class="suggestion" onclick="useSuggestion('Help me write some code')">
-            💻 Help me code
-          </div>
+    <main class="main">
+
+      <div class="topbar">
+        Infinity AI
+        <span class="mode" id="modeText">
+          General
+        </span>
+      </div>
+
+      <div id="messages">
+
+        <div class="welcome">
+
+          <h1>What can I help with?</h1>
+
+          <p>
+            Ask Infinity AI anything you need help with.
+          </p>
+
         </div>
+
       </div>
 
-    </section>
 
-    <div class="input-area">
+      <div class="input-area">
 
-      <div class="input-box">
-
-        <div class="attachment-name" id="attachmentName"></div>
-
-        <div class="input-row">
+        <div class="input-box">
 
           <input
-            type="file"
-            id="fileInput"
-            hidden
-            onchange="handleFile(this)"
-          />
-
-          <button
-            class="icon-btn"
-            onclick="document.getElementById('fileInput').click()"
-            title="Attach file"
-          >
-            📎
-          </button>
-
-          <textarea
             id="messageInput"
+            type="text"
             placeholder="Message Infinity AI..."
-            rows="1"
-            onkeydown="handleKey(event)"
-          ></textarea>
-
-          <button
-            class="icon-btn"
-            onclick="startVoice()"
-            title="Voice"
+            onkeydown="handleEnter(event)"
           >
-            🎤
-          </button>
 
-          <button
-            class="send-btn"
-            onclick="sendMessage()"
-            title="Send"
-          >
-            ➤
+          <button class="send" onclick="sendMessage()">
+            Send
           </button>
 
         </div>
+
+        <div class="disclaimer">
+          Infinity AI was created by Luis Gabriel Marino.
+        </div>
+
       </div>
 
-      <div class="disclaimer">
-        Infinity AI can make mistakes. Check important information.
-      </div>
+    </main>
 
-    </div>
+  </div>
 
-  </main>
-
-</div>
 
 <script>
 
-let currentMode = "General";
-let history = [];
-let attachedFile = null;
+let currentUser = null;
+let currentChatId = null;
+let chats = [];
 
-const input = document.getElementById("messageInput");
-const chat = document.getElementById("chat");
-const welcome = document.getElementById("welcome");
 
-function setMode(element, mode) {
+// LOGIN
 
-  document.querySelectorAll(".mode").forEach(x => {
-    x.classList.remove("active");
-  });
+function login() {
 
-  element.classList.add("active");
+  const name = document.getElementById("nameInput").value.trim();
+  const email = document.getElementById("emailInput").value.trim();
+  const password = document.getElementById("passwordInput").value;
 
-  currentMode = mode;
-}
+  if (!name || !email || !password) {
 
-function useSuggestion(text) {
-  input.value = text;
-  input.focus();
-}
+    document.getElementById("loginError").textContent =
+      "Please fill in all fields.";
 
-function newChat() {
-
-  history = [];
-
-  chat.innerHTML = `
-    <div class="welcome" id="welcome">
-      <div class="logo">∞</div>
-      <h1>What can I help with?</h1>
-      <p>Infinity AI — your all-in-one AI assistant.</p>
-
-      <div class="suggestions">
-        <div class="suggestion" onclick="useSuggestion('Help me study for my exam')">
-          📚 Help me study
-        </div>
-
-        <div class="suggestion" onclick="useSuggestion('Help me write something')">
-          ✍️ Help me write
-        </div>
-
-        <div class="suggestion" onclick="useSuggestion('Help me create an art idea')">
-          🎨 Create an art idea
-        </div>
-
-        <div class="suggestion" onclick="useSuggestion('Help me write some code')">
-          💻 Help me code
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function handleKey(event) {
-
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
-  }
-}
-
-function addMessage(role, text) {
-
-  if (welcome) {
-    const w = document.getElementById("welcome");
-    if (w) w.remove();
-  }
-
-  const message = document.createElement("div");
-  message.className = "message " + role;
-
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = role === "user" ? "You" : "∞";
-
-  const content = document.createElement("div");
-  content.className = "message-content";
-  content.textContent = text;
-
-  message.appendChild(avatar);
-  message.appendChild(content);
-
-  chat.appendChild(message);
-
-  chat.scrollTop = chat.scrollHeight;
-}
-
-async function sendMessage() {
-
-  const message = input.value.trim();
-
-  if (!message) return;
-
-  addMessage("user", message);
-
-  input.value = "";
-
-  const loadingId = "loading-" + Date.now();
-
-  const loading = document.createElement("div");
-  loading.className = "message";
-  loading.id = loadingId;
-
-  loading.innerHTML = `
-    <div class="avatar">∞</div>
-    <div class="message-content">Thinking...</div>
-  `;
-
-  chat.appendChild(loading);
-  chat.scrollTop = chat.scrollHeight;
-
-  try {
-
-    const response = await fetch("/api/chat", {
-
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-
-        message: message,
-
-        mode: currentMode,
-
-        history: history.slice(-12)
-
-      })
-
-    });
-
-    const data = await response.json();
-
-    document.getElementById(loadingId)?.remove();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Something went wrong.");
-    }
-
-    addMessage("assistant", data.answer);
-
-    history.push({
-      role: "user",
-      content: message
-    });
-
-    history.push({
-      role: "assistant",
-      content: data.answer
-    });
-
-  } catch (error) {
-
-    document.getElementById(loadingId)?.remove();
-
-    addMessage(
-      "assistant",
-      "Sorry, Infinity AI couldn't respond right now. " + error.message
-    );
-  }
-}
-
-function handleFile(inputElement) {
-
-  const file = inputElement.files[0];
-
-  if (!file) return;
-
-  attachedFile = file;
-
-  const name = document.getElementById("attachmentName");
-
-  name.textContent = "📎 " + file.name;
-  name.style.display = "block";
-}
-
-function startVoice() {
-
-  if (!("webkitSpeechRecognition" in window) &&
-      !("SpeechRecognition" in window)) {
-
-    alert("Voice input is not supported in this browser.");
     return;
   }
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "en-US";
-
-  recognition.start();
-
-  recognition.onresult = function(event) {
-
-    input.value =
-      event.results[0][0].transcript;
-
-    input.focus();
+  currentUser = {
+    name,
+    email
   };
+
+  localStorage.setItem(
+    "infinityUser",
+    JSON.stringify(currentUser)
+  );
+
+  startApp();
+}
+
+
+function demoAccount() {
+
+  currentUser = {
+    name: "Infinity User",
+    email: "demo@infinity.ai"
+  };
+
+  localStorage.setItem(
+    "infinityUser",
+    JSON.stringify(currentUser)
+  );
+
+  startApp();
+}
+
+
+function logout() {
+
+  localStorage.removeItem("infinityUser");
+
+  location.reload();
+}
+
+
+// APP
+
+function startApp() {
+
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "flex";
+
+  document.getElementById("profileName").textContent =
+    currentUser.name;
+
+  loadChats();
+
+  if (chats.length === 0) {
+    newChat();
+  } else {
+    openChat(chats[0].id);
+  }
+}
+
+
+// CHAT STORAGE
+
+function storageKey() {
+
+  return "infinityChats_" + currentUser.email;
+}
+
+
+function loadChats() {
+
+  const saved =
+    localStorage.getItem(storageKey());
+
+  chats = saved ? JSON.parse(saved) : [];
+
+  renderHistory();
+}
+
+
+function saveChats() {
+
+  localStorage.setItem(
+    storageKey(),
+    JSON.stringify(chats)
+  );
+
+  renderHistory();
+}
+
+
+function newChat() {
+
+  const chat = {
+
+    id: Date.now(),
+
+    title: "New chat",
+
+    messages: []
+
+  };
+
+  chats.unshift(chat);
+
+  currentChatId = chat.id;
+
+  saveChats();
+
+  renderMessages();
+}
+
+
+function openChat(id) {
+
+  const chat =
+    chats.find(c => c.id === id);
+
+  if (!chat) return;
+
+  currentChatId = id;
+
+  renderMessages();
+}
+
+
+function renderHistory() {
+
+  const container =
+    document.getElementById("chatHistory");
+
+  container.innerHTML = "";
+
+  chats.forEach(chat => {
+
+    const item =
+      document.createElement("div");
+
+    item.className = "history-item";
+
+    item.textContent = chat.title;
+
+    item.onclick = () =>
+      openChat(chat.id);
+
+    container.appendChild(item);
+
+  });
+}
+
+
+function renderMessages() {
+
+  const container =
+    document.getElementById("messages");
+
+  container.innerHTML = "";
+
+  const chat =
+    chats.find(c => c.id === currentChatId);
+
+  if (!chat || chat.messages.length === 0) {
+
+    container.innerHTML = `
+      <div class="welcome">
+        <h1>What can I help with?</h1>
+        <p>Ask Infinity AI anything you need help with.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  chat.messages.forEach(message => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "message " + message.role;
+
+    div.textContent =
+      message.content;
+
+    container.appendChild(div);
+
+  });
+
+  container.scrollTop =
+    container.scrollHeight;
+}
+
+
+// SEND MESSAGE
+
+async function sendMessage() {
+
+  const input =
+    document.getElementById("messageInput");
+
+  const message =
+    input.value.trim();
+
+  if (!message) return;
+
+  const chat =
+    chats.find(c => c.id === currentChatId);
+
+  if (!chat) return;
+
+  chat.messages.push({
+
+    role: "user",
+
+    content: message
+
+  });
+
+  if (chat.title === "New chat") {
+
+    chat.title =
+      message.substring(0, 35);
+
+  }
+
+  input.value = "";
+
+  saveChats();
+
+  renderMessages();
+
+
+  const thinking = {
+
+    role: "assistant",
+
+    content: "Thinking..."
+
+  };
+
+  chat.messages.push(thinking);
+
+  renderMessages();
+
+
+  try {
+
+    const response =
+      await fetch("/api/chat", {
+
+        method: "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body: JSON.stringify({
+
+          message,
+
+          mode: "General",
+
+          history:
+            chat.messages
+              .slice(0, -1)
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    chat.messages.pop();
+
+
+    if (!response.ok) {
+
+      chat.messages.push({
+
+        role: "assistant",
+
+        content:
+          data.error ||
+          "Infinity AI couldn't respond."
+
+      });
+
+    } else {
+
+      chat.messages.push({
+
+        role: "assistant",
+
+        content:
+          data.answer
+
+      });
+
+    }
+
+
+    saveChats();
+
+    renderMessages();
+
+  } catch (error) {
+
+    chat.messages.pop();
+
+    chat.messages.push({
+
+      role: "assistant",
+
+      content:
+        "Sorry, Infinity AI couldn't respond right now."
+
+    });
+
+    saveChats();
+
+    renderMessages();
+
+  }
+
+}
+
+
+function handleEnter(event) {
+
+  if (event.key === "Enter") {
+
+    sendMessage();
+
+  }
+
+}
+
+
+// AUTO LOGIN
+
+const savedUser =
+  localStorage.getItem("infinityUser");
+
+if (savedUser) {
+
+  currentUser =
+    JSON.parse(savedUser);
+
+  startApp();
+
 }
 
 </script>
