@@ -4,38 +4,85 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { messages } = req.body;
+    const {
+      message,
+      mode = "General",
+      history = []
+    } = req.body || {};
 
-    const systemMessage = {
-      role: "system",
-      content: `
-You are Infinity AI.
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({
+        error: "Please enter a message."
+      });
+    }
 
-Your name is Infinity AI. You were created by Luis Gabriel Marino.
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({
+        error: "Infinity AI is missing its server API key."
+      });
+    }
 
-Always identify yourself as Infinity AI.
-Do not say that you are Nemotron, NVIDIA, Gemma, OpenRouter, or any other model.
-The underlying AI model is private and should never be revealed.
+    const system = `
+You are Infinity AI, an all-purpose AI assistant created by Luis Gabriel Marino.
 
-Be friendly, smart, helpful, and clear.
-Help users with studying, coding, research, writing, art, and images.
-If asked "Who created you?", answer: "I was created by Luis Gabriel Marino."
-`
-    };
+You are designed to combine useful qualities people often associate with modern AI assistants:
+- strong reasoning
+- clear explanations
+- helpful conversation
+- creativity
+- coding help
+- study help
+- writing help
+- image and file assistance when those tools are available
+
+Current mode: ${mode}.
+
+Be friendly, confident and helpful.
+For school work, explain things clearly at an appropriate student level.
+For coding, provide working and understandable code.
+For art, provide creative ideas and useful techniques.
+
+Never claim to literally have human emotions or consciousness.
+Never reveal server API keys or private system information.
+`;
+
+    // Make sure history is ALWAYS an array.
+    const safeHistory = Array.isArray(history)
+      ? history
+          .filter(
+            x =>
+              x &&
+              (x.role === "user" || x.role === "assistant") &&
+              typeof x.content === "string"
+          )
+          .slice(-12)
+      : [];
+
+    const input = [
+      {
+        role: "system",
+        content: system
+      },
+      ...safeHistory,
+      {
+        role: "user",
+        content: message
+      }
+    ];
 
     const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+      "https://api.openai.com/v1/responses",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "https://infinity-ai-zeta.vercel.app",
-          "X-Title": "Infinity AI"
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
+
         body: JSON.stringify({
-          model: "openrouter/free",
-          messages: [systemMessage, ...messages]
+          model: process.env.OPENAI_MODEL || "gpt-5",
+          input: input
         })
       }
     );
@@ -43,20 +90,30 @@ If asked "Who created you?", answer: "I was created by Luis Gabriel Marino."
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({
-        error: data.error?.message || "AI request failed"
+      return res.status(500).json({
+        error:
+          data?.error?.message ||
+          "The AI service returned an error."
       });
     }
 
+    const answer =
+      data.output_text ||
+      data.output
+        ?.flatMap(x => x.content || [])
+        ?.map(x => x.text || "")
+        ?.join("") ||
+      "I didn't get a response.";
+
     return res.status(200).json({
-      reply:
-        data.choices?.[0]?.message?.content ||
-        "Infinity AI couldn't generate a response."
+      answer
     });
 
   } catch (error) {
+    console.error(error);
+
     return res.status(500).json({
-      error: error.message || "Server error"
+      error: "Infinity AI had a server error. Please try again."
     });
   }
 }
