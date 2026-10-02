@@ -1,56 +1,25 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    // Check API key
     const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "OPENROUTER_API_KEY is missing in Vercel."
+        error: "OPENROUTER_API_KEY is missing."
       });
     }
 
-    // Read request body
     const { messages, mode } = req.body || {};
 
     if (!Array.isArray(messages)) {
       return res.status(400).json({
-        error: "Messages must be an array."
+        error: "Invalid messages format."
       });
     }
 
-    // Infinity AI personality
-    const systemMessage = {
-      role: "system",
-      content: `
-You are Infinity AI ∞, an advanced, friendly and professional AI assistant.
-
-You were created by Luis Gabriel Marino.
-
-Your personality:
-- Friendly, confident and intelligent.
-- Professional and international.
-- Clear and natural.
-- Use a casual Gen-Z style when appropriate, without becoming unprofessional.
-- Explain difficult things simply.
-- Never pretend you can do something you cannot actually do.
-
-Your current mode is: ${mode || "Chat"}.
-
-If the user asks who created you, answer:
-"Infinity AI was created by Luis Gabriel Marino."
-
-You are Infinity AI, not ChatGPT or Gemini. You can be inspired by useful AI assistant patterns, but you have your own identity and branding.
-      `.trim()
-    };
-
-    // Send request to OpenRouter
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -64,7 +33,18 @@ You are Infinity AI, not ChatGPT or Gemini. You can be inspired by useful AI ass
         body: JSON.stringify({
           model: "openrouter/free",
           messages: [
-            systemMessage,
+            {
+              role: "system",
+              content: `You are Infinity AI ∞, created by Luis Gabriel Marino.
+
+Be intelligent, friendly, professional and clear.
+Use a casual Gen-Z tone when appropriate.
+Explain difficult things simply.
+Current mode: ${mode || "Chat"}.
+
+If asked who created you, say:
+"Infinity AI was created by Luis Gabriel Marino."`
+            },
             ...messages
           ],
           temperature: 0.7
@@ -74,37 +54,30 @@ You are Infinity AI, not ChatGPT or Gemini. You can be inspired by useful AI ass
 
     const data = await response.json();
 
-    // OpenRouter returned an error
     if (!response.ok) {
-      console.error("OpenRouter error:", data);
-
       return res.status(response.status).json({
-        error:
-          data?.error?.message ||
-          "OpenRouter could not generate a response."
+        error: data?.error?.message || "OpenRouter error."
       });
     }
 
-    // Extract AI response
     const reply = data?.choices?.[0]?.message?.content;
 
     if (!reply) {
       return res.status(500).json({
-        error: "OpenRouter returned no AI response."
+        error: "No readable AI response."
       });
     }
 
+    // Send a simple format that the website can read
     return res.status(200).json({
-      reply,
-      model: data.model || "openrouter/free"
+      reply: String(reply)
     });
 
   } catch (error) {
-    console.error("Infinity AI server error:", error);
+    console.error(error);
 
     return res.status(500).json({
-      error: "Infinity AI server error.",
-      details: error.message
+      error: error.message || "Server error."
     });
   }
 }
